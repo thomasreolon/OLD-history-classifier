@@ -73,7 +73,7 @@ set_of_words = set_of_words.difference(toDel)
 # dati per il random forest ???
 treeJson = {
 	'n_pers':l,
-	'count':count_words,
+	'vocabolary':{word:1 for word in set_of_words},
 	'words':people_words,
 	'names':NAMES
 }
@@ -101,19 +101,8 @@ with open("0_test/tests.json", "w") as outfile:
 
 #dati per l'SVC
 people_pieces = s2w.getPieces(people_words)
-"""
-n = 3
 
-for i in range(l):
-	svc_word = {}
-	for word in people_words[i]:
-		for piece in [word[i:i+n]  for i in range(0,len(word), n) ]:
-			if piece in svc_word:
-				svc_word[piece] += people_words[i][word]
-			else:
-				svc_word[piece] = people_words[i][word]
-	people_pieces.append(svc_word)
-"""
+
 svcJson = {
 	'n_pers':l,
 	'pieces':people_pieces,

@@ -1,4 +1,5 @@
-import re
+import re, gc
+from string import ascii_lowercase
 
 
 
@@ -28,7 +29,8 @@ def aggiornaDati(word:str, word_list:dict, count:int, set_of_words:set, data:dic
 		else:
 			word_list[word] = data[site]
 		count += data[site]
-		set_of_words.add(word)
+		if set_of_words!=None:
+			set_of_words.add(word)
 
 	return count
 
@@ -36,47 +38,55 @@ def aggiornaDati(word:str, word_list:dict, count:int, set_of_words:set, data:dic
 
 
 def getPieces(people_words):
-	people_pieces = []
-	count = []
 	l = len(people_words)
+	people_pieces = [{} for _ in range(l)]
+	count = []
 	n = 3
 
 	for i in range(l):
+		for c in ascii_lowercase:
+			for d in ascii_lowercase:
+				for e in ascii_lowercase:
+					people_pieces[i][c+d+e] = 0
+
+	for i in range(l):
+		gc.collect()
 		c = 0
-		svc_word = {}
 		for word in people_words[i]:
-			pieces = [word[i:i+n]  for i in range(0,len(word), n) ]
+			tmp = re.sub(r'[^\w]', '',word)
+			tmp = re.sub('[0-9]', '',tmp)
+			pieces = [tmp[i:i+n]  for i in range(0,len(tmp), n) ]
 
 			for piece in pieces:
-				if piece in svc_word:
-					svc_word[piece] += people_words[i][word]
-				else:
-					svc_word[piece] = people_words[i][word]
+				piece  = (piece + 'yxy')[0:3]
+				
+				people_pieces[i][piece] += people_words[i][word]
 				c += people_words[i][word]
-		people_pieces.append(svc_word)
+
 		count.append(c)
 
-	set_of_pieces = {p for p in people_pieces[0]}
-	for word in set_of_pieces:
-		ok = True
-		perc = []
-		for i in range(l):
-			if not (word in people_pieces[i]):
-				ok = False
-			else:
-				perc.append(people_pieces[i][word]/count[i])
-
-		if ok:
-			med = sum(perc)/l
-			var = 0
+	if l>1:
+		set_of_pieces = {p for p in people_pieces[0]}
+		for word in set_of_pieces:
+			ok = True
+			perc = []
 			for i in range(l):
-				var += (med-perc[i])**2
-			var /= l
-			#se trovo un pezzo di parola che ha poca varianza lo elimino
-			if var < 9.2e-07:
+				if not (word in people_pieces[i]):
+					ok = False
+				else:
+					perc.append(people_pieces[i][word]/count[i])
+
+			if ok:
+				med = sum(perc)/l
+				var = 0
 				for i in range(l):
-					count[i] -= people_pieces[i][word]
-					del people_pieces[i][word]
+					var += (med-perc[i])**2
+				var /= l
+				#se trovo un pezzo di parola che ha poca varianza lo elimino
+				if var < 9.2e-07:
+					for i in range(l):
+						count[i] -= people_pieces[i][word]
+						people_pieces[i][word] = 0
 
 	return people_pieces
 
