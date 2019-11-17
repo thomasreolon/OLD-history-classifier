@@ -43,7 +43,7 @@ for test in tests:
 
 	res = clf.predict(X)
 
-
+	print(res)
 
 
 

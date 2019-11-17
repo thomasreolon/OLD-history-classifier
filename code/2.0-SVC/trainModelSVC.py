@@ -15,12 +15,11 @@ names = data['names']
 v = DictVectorizer(sparse=False, sort=False)
 X = v.fit_transform(people_pieces) #hot-encoding
 X = normalize(X)                  #metto i vettori con norma = 1
-y = [0,1,2,3]
 
 clf = svm.SVC(gamma='auto')
 
 
-clf.fit(X,y)
+clf.fit(X,names)
 
 
 pickle.dump(clf, open(FILENAME, 'wb'))
