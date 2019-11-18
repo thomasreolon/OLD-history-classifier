@@ -1,0 +1,16 @@
+FROM ubuntu:latest
+#LABEL author="Thomas"
+
+COPY app /app
+
+WORKDIR /app
+
+
+#RUN echo "deb http://archive.ubuntu.com/ubuntu bionic main universe \n deb http://archive.ubuntu.com/ubuntu bionic-security main universe \ndeb http://archive.ubuntu.com/ubuntu bionic-updates main universe" >> /etc/apt/sources.list
+
+RUN add-apt-repository universe & apt-get update -y & apt-get install -y python3-pip python3
+
+
+RUN pip3 install -r requirements.txt
+
+CMD ["python3", "app.py"]

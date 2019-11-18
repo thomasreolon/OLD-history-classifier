@@ -3,7 +3,6 @@ from sklearn.preprocessing import normalize
 from string import ascii_lowercase
 import json, pickle
 import importlib.util
-import predictSVC
 import re
 
 
@@ -12,15 +11,36 @@ def alanizzaSito(site:str):
 
 	if 'ategory:' in site:
 		page = site.split('ategory:')[1]
+	elif '/' in site:
+		page = site.split('/',1)[1]
 	else:
-		page = site.split('.org/')[1]
+		page = site
+
 
 	#rendo tutto minuscolo e pulisco un po'
 	page = page.lower()
 	page = re.sub('\(|\)|%[0-9]*|l\'|,|s$|\.|\'', '', page)
-
+	page = re.sub('/|-', '_', page)
 
 	return page.split('_')
+
+def stringToDict(st:str):
+	st = re.sub('%3A|%3D', ':',st)
+	st = re.sub('%2F', '/',st)
+	st = re.sub('%2D|%5F', '_',st)
+	st = re.sub('%3B|%2C|%20', ',',st)
+	st = re.sub(',,*', ',', st)
+	st = re.sub('\'', '', st)
+
+	links = st.split(',')
+	X = {}
+	for l in links:
+		t = l.split(':',1)
+		if len(t)==2 and t[1].isdigit():
+			X[t[0]] = int(t[1])
+	if len(X) == 0:
+		X = None
+	return X
 
 		
 
@@ -106,7 +126,7 @@ class svcPredictor:
 	def predict(self,arr):
 		return self.clf.predict(arr)[0]
 
-	def formatInput(data:dict):
+	def formatInput(self,data:dict):
 		word_list = {}
 		v = DictVectorizer(sparse=False, sort=False)
 

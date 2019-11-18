@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Home</title>
+
+		<style type="text/css">
+			h1 {
+				font-weight: bold;
+				text-align: center;
+			}
+			p {
+				text-align: center;
+			}
+			.main{
+				max-width:60%;
+				background-color: white;
+				float:center;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			body{
+				background-color: whitesmoke;
+			}
+			.btn{
+				background-color: blue;
+				color: white;
+				min-width: 150px;
+				min-height: 50px;
+				border-radius: 16px;
+				opacity: 0.6;
+				transition: 0.3s;
+				display: inline-block;
+				cursor: pointer;
+			}
+			.btn:hover{
+				opacity: 1;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="main">
+			<h1>Home della API docker</h1>
+			<hr/>
+			<br/>
+
+			
+			<form action="http://localhost:5000/api/svc" method="POST" id="dataform">
+				<p><label for="first_name">Links:</label></p>
+				<p><textarea name="text" rows="4" cols="50" form="dataform"></textarea></p>	
+
+
+				<p><input class="btn" value="USA MODELLO VCS" type="submit"></p>
+			</form>
+		</div>
+
+
+
+	</body>
+
+</html>
