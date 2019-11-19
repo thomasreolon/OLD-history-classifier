@@ -77,14 +77,14 @@ treeJson = {
 	'words':people_words,
 	'names':NAMES
 }
-with open("2.1-FOREST/data/clean.json", "w") as outfile:
+with open("2.1-FOREST/data/dati.json", "w") as outfile:
     json.dump(treeJson, outfile, indent=2)
 
 
 
 # lista delle parole trovate
 wordsJson = {word:1 for word in set_of_words}
-with open("words.json", "w") as outfile:
+with open("2.1-FOREST/data/words.json", "w") as outfile:
     json.dump(wordsJson, outfile, indent=2)
 
 
@@ -111,6 +111,3 @@ svcJson = {
 
 with open("2.0-SVC/data/dati.json", "w") as outfile:
     json.dump(svcJson, outfile, indent=2)
-
-
-
