@@ -1,5 +1,6 @@
-import json, random
+import json, random, numpy
 import importlib.util
+
 
 #import la funzione per pulire il sito
 spec = importlib.util.spec_from_file_location("site2word", "0_function/site2word.py")
@@ -73,19 +74,44 @@ set_of_words = set_of_words.difference(toDel)
 # dati per il random forest ???
 treeJson = {
 	'n_pers':l,
-	'vocabolary':{word:1 for word in set_of_words},
 	'words':people_words,
+	'count':count_words,
 	'names':NAMES
 }
 with open("2.1-FOREST/data/dati.json", "w") as outfile:
     json.dump(treeJson, outfile, indent=2)
 
+#vocabolario
+idf = {}
+for word in set_of_words:
+	tot = 0
+	for i in range(l):
+		if word in people_words[i]:
+			tot+=1
+	idf[word] = tot
+
+topWords = set()
+for i in range(l):
+	top = []
+	for word in people_words[i]:
+		tdIdf = numpy.log(l/idf[word]) * people_words[i][word]/count 
+		top.append((word,tdIdf))
+
+	mostFrequent = sorted(top, key=lambda tup: tup[1])
+	for word,_ in mostFrequent[-200:]:
+		topWords.add(word)
 
 
-# lista delle parole trovate
-wordsJson = {word:1 for word in set_of_words}
-with open("2.1-FOREST/data/words.json", "w") as outfile:
-    json.dump(wordsJson, outfile, indent=2)
+voc = [word for word in topWords]
+list.sort(voc)
+print(voc)
+
+vocab = {
+	'vocabolary':voc,
+}
+with open("2.1-FOREST/data/voc.json", "w") as outfile:
+    json.dump(vocab, outfile, indent=2)
+
 
 
 # test
