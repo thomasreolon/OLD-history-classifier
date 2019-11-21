@@ -1,17 +1,15 @@
 from sklearn.feature_extraction import DictVectorizer
-from sklearn.preprocessing import normalize
 from string import ascii_lowercase
 import json, pickle
 import importlib.util
 import re
 
 
-FILENAME = 'data/svcModel.pk'
+FILENAME = 'data/forestModel.pk'
 
 
 #vale solo per i siti di wikipedia
 def alanizzaSito(site:str):
-
 	if 'ategory:' in site:
 		page = site.split('ategory:')[1]
 	elif '/' in site:
@@ -65,7 +63,7 @@ def aggiornaDati(word:str, word_list:dict, count:int, set_of_words:set, data:dic
 
 
 
-def getPieces(people_words):
+def getWords(people_words):
 	l = len(people_words)
 	people_pieces = [{} for _ in range(l)]
 	count = []
@@ -114,7 +112,6 @@ def getPieces(people_words):
 					for i in range(l):
 						count[i] -= people_pieces[i][word]
 						people_pieces[i][word] = 0
-
 	return people_pieces
 
 
@@ -122,9 +119,11 @@ def getPieces(people_words):
 
 
 
-class svcPredictor:
+class forestPredictor:
 	def __init__(self):
 		self.clf = pickle.load(open(FILENAME, 'rb'))
+		raw_file = open('data/vocabolary.json')
+		self.vocabolary = (json.load(raw_file))['vocabolary']
 
 	def predict(self,arr):
 		return self.clf.predict(arr)[0]
@@ -135,24 +134,19 @@ class svcPredictor:
 
 		for site in data:
 			parole = alanizzaSito(site)
+			count = 0
 			for word in parole:
-				aggiornaDati(word, word_list, 0, None, data, site)
+				count = aggiornaDati(word, word_list, count, None, data, site)
 
-		pieces = getPieces([word_list])
-
-		X = v.fit_transform(pieces) #hot-encoding
-		X = normalize(X)
-
-		return X
-
-
-
+		X = []
+		for word in self.vocabolary:
+			tf = 0
+			if word in word_list:
+				tf = word_list[word] / count
+			X.append(tf)
+		return [X]
 
 
 
 def getPredictor():
-	return svcPredictor()
-
-
-
-
+	return forestPredictor()

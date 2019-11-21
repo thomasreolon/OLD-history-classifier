@@ -58,7 +58,7 @@ def getPieces(people_words):
 			pieces = [tmp[i:i+n]  for i in range(0,len(tmp), n) ]
 
 			for piece in pieces:
-				piece  = (piece + 'yxy')[0:3]
+				piece  = (piece + 'xxx')[0:3]
 				
 				people_pieces[i][piece] += people_words[i][word]
 				c += people_words[i][word]

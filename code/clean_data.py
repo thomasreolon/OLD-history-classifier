@@ -9,6 +9,7 @@ spec.loader.exec_module(s2w)
 
 
 #costanti
+PERCENTAGE = 0
 SRCFOLDER = '../raw/'
 NAMES = ['emma', 'michelle', 'roger', 'tim']
 
@@ -31,7 +32,7 @@ for person in NAMES:
 	##
 	for site in data:
 
-		if random.randint(0, 100) > 10: #training set	
+		if random.randint(0, 100) >= PERCENTAGE: #training set	
 			parole = s2w.alanizzaSito(site)
 			for word in parole:
 				count = s2w.aggiornaDati(word, word_list, count, set_of_words, data, site)
@@ -43,6 +44,7 @@ for person in NAMES:
 	count_words.append(count)
 	people_test.append(test)
 
+people_pieces = s2w.getPieces(people_words)
 
 
 #cerchiamo di eliminare le parole comuni a tutte le persone (articoli preposizioni ...)
@@ -81,6 +83,9 @@ treeJson = {
 with open("2.1-FOREST/data/dati.json", "w") as outfile:
     json.dump(treeJson, outfile, indent=2)
 
+
+
+
 #vocabolario
 idf = {}
 for word in set_of_words:
@@ -98,13 +103,12 @@ for i in range(l):
 		top.append((word,tdIdf))
 
 	mostFrequent = sorted(top, key=lambda tup: tup[1])
-	for word,_ in mostFrequent[-200:]:
+	for word,_ in mostFrequent[-100:]:
 		topWords.add(word)
 
 
 voc = [word for word in topWords]
 list.sort(voc)
-print(voc)
 
 vocab = {
 	'vocabolary':voc,
@@ -126,7 +130,6 @@ with open("0_test/tests.json", "w") as outfile:
 
 
 #dati per l'SVC
-people_pieces = s2w.getPieces(people_words)
 
 
 svcJson = {

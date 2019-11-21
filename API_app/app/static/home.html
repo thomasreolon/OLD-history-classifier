@@ -12,7 +12,7 @@
 				text-align: center;
 			}
 			.main{
-				max-width:60%;
+				max-width:80%;
 				background-color: white;
 				float:center;
 				margin-left: auto;
@@ -40,21 +40,34 @@
 
 	<body>
 		<div class="main">
-			<h1>Home della API docker</h1>
+			<h1>Home</h1>
 			<hr/>
 			<br/>
 
+			<p>
+				per utilizzare le API, invia una richiesta in POST alle pagine <a href="api/svc">api/svc</a> oppure <a href="api/forest">/api/forest</a>, usando come payload della richiesta un JSON con il sito visitato come chiave ed il numero di visite come valore. Più info <a href="api">qui</a>
+			</p>
+			<br/>
+			<p>
+				puoi anche provare le api inserendo i siti qui sotto, separati da una vigola. Come divisore tra sito-numero di visite puoi usare ':'
+			</p>
 			
-			<form action="http://localhost/api/svc" method="POST" id="dataform">
+			<form action="api/svc" method="POST" id="dataform">
+
 				<p><label for="first_name">Links:</label></p>
-				<p><textarea name="text" rows="4" cols="50" form="dataform"></textarea></p>	
+				<p><textarea name="text" rows="12" cols="80" form="dataform">
+					"http://en.wikipedia.org/wiki/Category:Obscenity_controversies_in_music": 2,
+				    "http://en.wikipedia.org/wiki/Category:Cities_in_Dallas%E2%80%93Fort_Worth_metroplex": 4,
+				    "http://en.wikipedia.org/wiki/Category:Entertainment_companies_based_in_New_York": 2,
+				    "http://en.wikipedia.org/wiki/Category:Hospital_buildings_on_the_National_Register_of_Historic_Places": 1,
+				    "http://en.wikipedia.org/wiki/Category:County_seats_in_Wisconsin": 5
+				</textarea></p>
 
-
-				<p><input class="btn" value="USA MODELLO VCS" type="submit"></p>
+				<p><input class="btn" value="USA MODELLO SVC" type="submit"></p>
 			</form>
+
+			
 		</div>
-
-
 
 	</body>
 

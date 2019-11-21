@@ -1,5 +1,0 @@
-
-curl --header "Content-Type: application/json" \
-  --request POST \
-  --data '{"wiki.org/writer_month":10,"wiki.org/music_hiv":3}' \
-  http://localhost/api/svc

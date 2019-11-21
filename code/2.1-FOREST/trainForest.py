@@ -1,5 +1,6 @@
 import json, pickle
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import normalize
 import numpy as np
 
 FILENAME = 'RndForestModel.pk'
