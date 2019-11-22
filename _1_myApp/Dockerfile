@@ -7,6 +7,13 @@ RUN echo "http://mirror1.hs-esslingen.de/pub/Mirrors/alpine/v3.8/main" >> /etc/a
     echo "http://mirror1.hs-esslingen.de/pub/Mirrors/alpine/edge/testing" >> /etc/apk/repositories
 
 
+
+COPY app /app
+
+WORKDIR /app
+
+
+
 #installo i package
 RUN apk add --no-cache --virtual sklearn-runtime python3 git bash zlib hdf5 libgfortran libgcc libstdc++ musl openblas && \
     apk add --no-cache --virtual .build-deps build-base python3-dev zlib-dev hdf5-dev freetype-dev libpng-dev openblas-dev && \
@@ -19,10 +26,6 @@ RUN apk add --no-cache --virtual sklearn-runtime python3 git bash zlib hdf5 libg
     rm -rf /var/cache/apk/*
 
 
-
-COPY app /app
-
-WORKDIR /app
 
 
 CMD ["python3", "app.py"]

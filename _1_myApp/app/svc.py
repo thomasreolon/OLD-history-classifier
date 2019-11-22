@@ -9,6 +9,13 @@ import re
 FILENAME = 'data/svcModel.pk'
 
 
+def isNumber(s):
+    try: 
+        int(s)
+        return True
+    except ValueError:
+        return False
+
 #vale solo per i siti di wikipedia
 def alanizzaSito(site:str):
 
@@ -28,7 +35,7 @@ def alanizzaSito(site:str):
 	return page.split('_')
 
 def stringToDict(st:str):
-	st = re.sub('ategory:', '/',st)
+	st = re.sub('%09|%0D|%0A|%22', '',st)
 	st = re.sub('%3A|%3D', ':',st)
 	st = re.sub('%2F', '/',st)
 	st = re.sub('%2D|%5F', '_',st)
@@ -39,9 +46,18 @@ def stringToDict(st:str):
 	links = st.split(',')
 	X = {}
 	for l in links:
-		t = l.split(':',1)
-		if len(t)==2 and t[1].isdigit():
-			X[t[0]] = int(t[1])
+		t = l.split(':')
+		site = t[0]
+		val = 0
+		for i in range(1,len(t)):
+			if isNumber(t[i]):
+				val = int(t[i])
+				break
+			else:
+				site += ":"+t[i]
+
+		if val>0:
+			X[site] = val
 	if len(X) == 0:
 		X = None
 	return X

@@ -11,6 +11,7 @@ clfForest = forest.getPredictor()
 
 def parseInput():
 	body = request.get_json(force=True,silent=True)
+
 	if body == None:
 		req = str((request.data))
 		if 'text=' in req:
